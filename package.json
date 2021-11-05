@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "lerna run build"
+    "dev": "lerna run --parallel dev"
   },
   "workspaces": [
     "packages/*"

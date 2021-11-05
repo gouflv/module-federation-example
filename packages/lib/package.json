@@ -4,11 +4,14 @@
   "main": "lib/index.js",
   "scripts": {
     "dev": "webpack server",
-    "build": "webpack"
+    "build": "npm run clear && webpack --mode production",
+    "clear": "rm -rf ./dist",
+    "serve": "serve dist -p 9001"
   },
   "dependencies": {
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "serve": "^13.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",

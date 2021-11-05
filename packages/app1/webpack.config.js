@@ -1,6 +1,11 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
 
+const getRemoteLibUrl = () => {
+  const { REMOTE_LIB_URL } = process.env;
+  return `lib@${REMOTE_LIB_URL || "//localhost:3001/remoteEntry.js"}`;
+};
+
 module.exports = {
   mode: "development",
   entry: "./index",
@@ -20,11 +25,9 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: "lib",
-      filename: "remoteEntry.js",
-      library: { type: "var", name: "lib" },
-      exposes: {
-        "./components": "./components",
+      name: "app1",
+      remotes: {
+        lib: getRemoteLibUrl(),
       },
       shared: {
         react: { singleton: true },
@@ -35,24 +38,10 @@ module.exports = {
       template: "./public/index.html",
     }),
   ],
-  output: {
-    chunkFilename: (pathData) => {
-      return pathData.chunk.name === "remoteEntryVendors"
-        ? "[name].[contenthash].js"
-        : "[id].js";
-    },
-  },
   optimization: {
-    splitChunks: {
-      cacheGroups: {
-        remoteEntry: {
-          name: "remoteEntryVendors",
-          test: /[\\/]node_modules[\\/]/,
-        },
-      },
-    },
+    minimize: false,
   },
   devServer: {
-    port: 3001,
+    port: 3002,
   },
 };
